@@ -19,9 +19,9 @@ def execute(command):
 
 
 def moveFile(file, path):
-    if os.path.exists(file):
-        execute("mv {} {}/{}".format(file, path, file.replace(".py", "")))
-        execute("chmod ugo+x {}/{}".format(path, file.replace(".py", "")))
+    if os.path.exists(file+".py"):
+        execute("cp {}.py {}/{}".format(file, path, file))
+        execute("chmod ugo+x {}/{}".format(path, file))
         return True
     else:
         return False
@@ -29,11 +29,14 @@ def moveFile(file, path):
 
 print("Installing dJson...")
 path = "/usr/local/bin"
-file = "djson.py"
+file = "djson"
 checkPath(path)
-if moveFile(file, path):
-    print("Installed successfully!")
-    print("Type 'djson -help' to access manual")
+if os.path.exists("{}/{}".format(path, file)):
+    print("dJson already installed!")
 else:
-    print("dJson file not found")
-    print("Installation aborted!")
+    if moveFile(file, path):
+        print("Installed successfully!")
+        print("Type 'djson -help' to access manual")
+    else:
+        print("dJson file not found")
+        print("Installation aborted!")
