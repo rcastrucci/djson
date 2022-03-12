@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+# coding: utf-8
+
+import os
+import os.path
+import subprocess
+
+def checkPath(path):
+    isExist = os.path.exists(path)
+    if not isExist:
+        os.makedirs(path)
+        print("A directory {} was created!".format(path))
+
+
+def execute(command):
+    bashCommand = command
+    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+
+
+def moveFile(file, path):
+    if os.path.exists(file):
+        execute("mv {} {}/{}".format(file, path, file.replace(".py", "")))
+        execute("chmod ugo+x {}/{}".format(path, file.replace(".py", "")))
+        return True
+    else:
+        return False
+
+
+print("Installing dJson...")
+path = "/usr/local/bin"
+file = "djson.py"
+checkPath(path)
+if moveFile(file, path):
+    print("Installed successfully!")
+    print("Type 'djson -help' to access manual")
+else:
+    print("dJson file not found")
+    print("Installation aborted!")
